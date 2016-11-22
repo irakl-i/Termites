@@ -18,5 +18,8 @@
     <ClCompile Include="Termites.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Secondometre.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

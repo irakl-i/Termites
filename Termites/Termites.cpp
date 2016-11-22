@@ -4,7 +4,7 @@
 
 using namespace std;
 
-int termites(vector<int> &input)
+void fuse(vector<int>& input)
 {
 	int m = 0;
 	vector<int> s(input.size() * 2);
@@ -18,57 +18,47 @@ int termites(vector<int> &input)
 			m -= 2;
 		}
 	}
-	int value = 0;
-	int sign = 1;
-	int i = 1;
-	int j = m;
-	while (i <= j)
+	input.clear();
+	for (int i = 1; i <= m; i++)
 	{
-		if (s[i] >= s[j]) {
-			value = value + sign * s[i];
-			i++;
-		}
-		else {
-			value = value + sign * s[j];
-			j--;
-		}
-		sign = -sign;
-	}
-	for (int i = 0; i < s.size(); i++)
-	{
-		cout << s[i] << " ";
+		input.push_back(s[i]);
 	}
 	cout << endl;
-	return value;
 }
 
 int main()
 {
 	int x = 0;
-	//cin >> x;
-	vector<int> input;
-	/*for (int i = 0; i < x; i++)
+	cin >> x;
+	vector<int> v;
+	vector<vector<int> > vs;
+	for (int i = 0; i < x; i++)
 	{
 		int n;
 		cin >> n;
-		input[i] = n;
-	}*/
-	input.push_back(5);
-	input.push_back(7);
-	input.push_back(10);
-	input.push_back(6);
-	input.push_back(9);
-	input.push_back(9);
-	input.push_back(1);
-	input.push_back(7);
-	input.push_back(11);
-	input.push_back(8);
+		if(n == 0 && i != 0)
+		{
+			vs.push_back(v);
+			v.clear();
+			continue;
+		}
+		v.push_back(n);
+	}
+	vs.push_back(v);
 
-	/*for (int i = 0; i < input.size(); i++)
+	for (int i = 0; i < vs.size(); ++i)
 	{
-		cout << input[i] << " ";
-	}*/
+		fuse(vs[i]);
+	}
 
-	cout << termites(input) << endl;
+	for (int i = 0; i < vs.size(); ++i)
+	{
+		for (int j = 0; j < vs[i].size(); ++j)
+		{
+			cout << vs[i][j] << " ";
+		}
+		cout << 0 << " ";
+	}
+
 	cin >> x;
 }
