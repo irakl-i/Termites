@@ -1,14 +1,16 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <stdio.h>
+#include <cmath>
 
 using namespace std;
 
-void fuse(vector<int>& input)
+void fuse(vector<long long>& input)
 {
-	int m = 0;
-	vector<int> s(input.size() * 2);
-	for (int i = 0; i < input.size(); i++)
+	long long m = 0;
+	vector<long long> s(input.size() * 2);
+	for (long long i = 0; i < input.size(); i++)
 	{
 		m++;
 		s[m] = input[i];
@@ -19,20 +21,20 @@ void fuse(vector<int>& input)
 		}
 	}
 	input.clear();
-	for (int i = 1; i <= m; i++)
+	for (long long i = 1; i <= m; i++)
 	{
 		input.push_back(s[i]);
 	}
-	cout << endl;
 }
 
-void worthless(vector<int>& input, int& value, int n)
+void worthless(vector<long long>& input, long long& value, int n)
 {
-	for (int i = input.size() - 1; i >= 0; i -= 2)
+	if (input.size() <= 0) return;
+	for (long long i = input.size() - 1; i >= 0; i -= 2)
 	{
 		if (i >= 1 && input[i] >= input[i - 1])
 		{
-			value += pow(-1, n) * (input[i - 1] - input[i]);
+			value += pow(-1.0, double(n)) * (input[i - 1] - input[i]);
 			input.erase(input.begin() + i - 1, input.begin() + i + 1);
 		}
 	}
@@ -40,17 +42,19 @@ void worthless(vector<int>& input, int& value, int n)
 
 int main()
 {
-	int value = 0;
-	int x = 0;
+	long long value = 0;
+	long long x = 0;
 	int n = 0;
+	long long s = 0;
 	cin >> x;
-	vector<int> v;
-	vector<vector<int>> vs;
-	for (int i = 0; i < x; i++)
+	vector<long long> v;
+	vector<vector<long long> > vs;
+	for (long long i = 0; i < x; i++)
 	{
-		int n;
+		long long n;
 		cin >> n;
-		if (n == 0 && i != 0)
+		s += n;
+		if (n == 0)
 		{
 			vs.push_back(v);
 			v.clear();
@@ -60,41 +64,40 @@ int main()
 	}
 	vs.push_back(v);
 
-	for (int i = 0; i < vs.size(); ++i)
+	for (long long i = 0; i < vs.size(); ++i)
 	{
 		fuse(vs[i]);
 	}
 
-	for (int i = 0; i < vs.size(); ++i)
+	for (long long i = 0; i < vs.size(); ++i)
 	{
 		n += vs[i].size();
 	}
-	
-	//vector<int> temp;
-	//temp.push_back(4);
-	//temp.push_back(3);
-	//temp.push_back(7);
-	////temp.push_back(6);
-	//reverse(temp.begin(), temp.end());
 
-	//worthless(temp, value, n);
-	//for (int i = 0; i < temp.size(); ++i)
-	//{
-	//	cout << temp[i];
-	//}
+	reverse(vs[0].begin(), vs[0].end());
+	worthless(vs[0], value, n);
+	worthless(vs[vs.size() - 1], value, n);
+	reverse(vs[0].begin(), vs[0].end());
 
-	/*worthless(vs[0], value, n);
-	worthless(vs[vs.size() - 1], value, n);*/
+	vector<long long> last;
 
+	for (long long i = 0; i < vs.size(); ++i)
+	{
+		for (long long j = 0; j < vs[i].size(); ++j)
+		{
+			last.push_back(vs[i][j]);
+		}
+	}
 
-	//for (int i = 0; i < vs.size(); ++i)
-	//{
-	//	for (int j = 0; j < vs[i].size(); ++j)
-	//	{
-	//		cout << vs[i][j];
-	//	}
-	//	cout << " ";
-	//}
+	sort(last.begin(), last.end());
+	reverse(last.begin(), last.end());
+	long long sign = 1;
+	for (long long i = 0; i < last.size(); ++i)
+	{
+		value += sign * last[i];
+		sign = -sign;
+	}
 
+	cout << (s + value) / 2 << " " << (s - value) / 2 << endl;
 	cin >> x;
 }
